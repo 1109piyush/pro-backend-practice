@@ -148,7 +148,7 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
   // find user based on hased on token and time in future
   const user = await User.findOne({
     encryToken,
-    // $gt means if time greater than simple before expiry
+    // $gt means if time greater than simple before expiry  called comparision query selector in mongodb
     forgotPasswordExpiry: { $gt: Date.now() },
   });
 
@@ -179,8 +179,8 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
 });
 
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
-  //req.user will be added by middleware
   // find user by id
+  //req.user will be added by middleware that contain decoded token and id
   const user = await User.findById(req.user.id);
 
   //send response and user data
@@ -273,6 +273,7 @@ exports.adminAllUser = BigPromise(async (req, res, next) => {
 });
 
 exports.admingetOneUser = BigPromise(async (req, res, next) => {
+  // admin want to know one user details
   // get id from url and get user from database
   const user = await User.findById(req.params.id);
 

@@ -12,7 +12,7 @@ exports.addProduct = BigPromise(async (req, res, next) => {
   if (!req.files) {
     return next(new CustomError("images are required", 401));
   }
-
+// upload files from tempfile 
   if (req.files) {
     for (let index = 0; index < req.files.photos.length; index++) {
       let result = await cloudinary.v2.uploader.upload(
@@ -28,7 +28,7 @@ exports.addProduct = BigPromise(async (req, res, next) => {
       });
     }
   }
-
+// inject image array in req and user id
   req.body.photos = imageArray;
   req.body.user = req.user.id;
 
@@ -43,7 +43,7 @@ exports.addProduct = BigPromise(async (req, res, next) => {
 exports.getAllProduct = BigPromise(async (req, res, next) => {
   const resultPerPage = 6;
   const totalcountProduct = await Product.countDocuments();
-
+// where clause from url
   const productsObj = new WhereClause(Product.find(), req.query)
     .search()
     .filter();
